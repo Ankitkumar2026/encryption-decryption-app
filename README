@@ -1,0 +1,87 @@
+# 🔐 Secure File Locker in C
+
+A simple yet powerful **file encryption and decryption tool** written in
+C using XOR-based encryption and HEX encoding.
+
+------------------------------------------------------------------------
+
+## 🚀 Features
+
+-   🔑 Password-based encryption
+-   🔓 Decryption using the same password
+-   🔄 Uses XOR encryption (reversible)
+-   🧾 Encrypted output stored in readable HEX format
+-   💻 Command-line interface (CLI)
+-   ⚡ Fast and lightweight
+
+------------------------------------------------------------------------
+
+## 🧠 How It Works
+
+-   Each character of the file is XOR-ed with a password key
+-   The result is converted into HEX format for safe storage
+-   During decryption, HEX is converted back and XOR is applied again to
+    recover original data
+
+------------------------------------------------------------------------
+
+## 📂 Project Structure
+
+file-locker/ │ ├── main.c ├── encrypt.c ├── encrypt.h ├── README.md
+
+------------------------------------------------------------------------
+
+## 🔧 Compilation
+
+gcc main.c encrypt.c -o locker
+
+------------------------------------------------------------------------
+
+## ▶️ Usage
+
+### 🔐 Encrypt a file
+
+locker input.txt encrypted.txt mypassword e
+
+### 🔓 Decrypt a file
+
+locker encrypted.txt decrypted.txt mypassword d
+
+------------------------------------------------------------------------
+
+## 📌 Arguments
+
+-   input : Input file name\
+-   output : Output file name\
+-   password: Encryption/Decryption key\
+-   mode : e (encrypt), d (decrypt)
+
+------------------------------------------------------------------------
+
+## 💡 Example
+
+Input: Hello World\
+Encrypted: 1F0A0F0F08...\
+Decrypted: Hello World
+
+------------------------------------------------------------------------
+
+## ⚠️ Notes
+
+-   Same password must be used for decryption
+-   Encrypted file is stored in HEX format
+-   This is for learning purposes
+
+------------------------------------------------------------------------
+
+## 🔥 Future Improvements
+
+-   Stronger encryption
+-   Base64 support
+-   GUI version
+
+------------------------------------------------------------------------
+
+## 👨‍💻 Author
+
+Ankit 🚀
