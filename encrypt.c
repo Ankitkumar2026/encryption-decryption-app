@@ -1,6 +1,14 @@
 #include <stdio.h>
 #include <string.h>
 #include "encrypt.h"
+unsigned char rotate_left (unsigned char ch)
+{
+    return(ch << 3) | (ch >> 5);
+}
+unsigned char rotate_right (unsigned char ch)
+{
+    return(ch >> 3) | (ch  << 5);
+}
 void processFile( const char *input, const char *output, const char *key, char mode)
 {
 FILE *f1=fopen(input,"rb");
@@ -11,30 +19,36 @@ if(f1 == NULL ||f2 == NULL)
     printf("FILE ERROR \n");
     return;
 }
-int ch , i=0;
+
+int  i=0;
 int key_len=strlen(key);
-if(mode=='e')
-{
-    while((ch =fgetc(f1)) != EOF)
+unsigned char ch;
+
+    while(fread(&ch , 1, 1, f1) == 1)
+    {
+     if(mode=='e')
+
     {
     ch= ch ^ key[i % key_len];
-     fprintf(f2, "%02X", ch); 
-    i++;
+     ch= rotate_right(ch);
+     ch = ch+5;
+   
+    
 
-     }
-     printf("Encryption done(Hex format) \n");
-}else if(mode =='d')
+     }else if(mode =='d')
 {
-    unsigned int value;
-    while(fscanf(f1,"%2X",&value)==1)
-    {
-        ch= value^key[i%key_len];
-        fputc(ch,f2);
-        i++;
-    }
-    printf(" Decryption done\n");
+   ch= ch-5;
+   ch= rotate_left(ch);
+   ch= ch ^key[i % key_len];
+  
+    
 
 }
+fwrite(&ch , 1 ,1 ,f2);
+i++;
+
+}
+   printf(" Done (%c mode)\n",mode);
 
 fclose(f1);
 fclose(f2);
