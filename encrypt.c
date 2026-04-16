@@ -23,32 +23,59 @@ if(f1 == NULL ||f2 == NULL)
 int  i=0;
 int key_len=strlen(key);
 unsigned char ch;
+unsigned int checksum = 0;
 
-    while(fread(&ch , 1, 1, f1) == 1)
-    {
+    
+   
      if(mode=='e')
 
     {
+        while(fread(&ch , 1, 1, f1) == 1)
+         {
+            checksum += ch;
     ch= ch ^ key[i % key_len];
      ch= rotate_right(ch);
      ch = ch+5;
-   
-    
-
-     }else if(mode =='d')
+     fwrite(&ch , 1 ,1 ,f2);
+     i++;
+   }
+   fwrite(&checksum ,sizeof(checksum),1, f2);
+   printf(" Encrypted  with integrity  check \n");
+}
+   else if(mode =='d')
 {
-   ch= ch-5;
+    fseek(f1 ,0, SEEK_END);
+    long size = ftell(f1);
+    rewind(f1);
+    long data_size =size - sizeof(unsigned int);
+    fseek (f1, data_size, SEEK_SET);
+    unsigned int stored_checksum;
+    fread(&stored_checksum, sizeof(stored_checksum), 1, f1);
+    rewind(f1);
+    for(long j= 0; j<data_size; j++)
+    {
+        fread(&ch, 1, 1, f1);
+        ch= ch-5;
    ch= rotate_left(ch);
    ch= ch ^key[i % key_len];
+   checksum +=ch;
+   fwrite( &ch, 1, 1, f2);
+   i++;
+  
+    }
+    if(checksum != stored_checksum)
+    {
+        printf("❌  wrong password or corrupted  file \n");
+    }else 
+    {
+        printf("✅ Decryption successful\n");
+    }
+    
   
     
 
 }
-fwrite(&ch , 1 ,1 ,f2);
-i++;
 
-}
-   printf(" Done (%c mode)\n",mode);
 
 fclose(f1);
 fclose(f2);

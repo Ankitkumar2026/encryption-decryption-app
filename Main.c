@@ -1,16 +1,17 @@
 #include <stdio.h>
-#include <string.h>
 #include "encrypt.h"
+#include "utils.h"
 
 int  main (int argc, char *argv[])
 {
-    if (argc !=5)
+    if (argc !=4)
     {
-        printf("usage : prog input output password\n");
+        printf("usage : prog input output password e/d\n");
         return 1;
     }
-    processFile(argv[1],argv[2],argv[3],argv[4][0]);
-printf("operation completed successfully\n");
-    
+    char password[100];
+    getPassword(password);
+    processFile(argv[1],argv[2], password,argv[3][0]);
+     
     return 0;
 }

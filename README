@@ -1,7 +1,7 @@
 # 🔐 Secure File Locker in C
 
-A simple yet effective **file encryption and decryption tool** written in C.
-It uses **XOR encryption, bitwise rotation, and HEX encoding** to securely transform file data.
+A powerful **file encryption & decryption tool** written in C.
+This project uses **XOR encryption, bitwise rotation, and checksum validation** to ensure both **security and data integrity**.
 
 ---
 
@@ -10,8 +10,10 @@ It uses **XOR encryption, bitwise rotation, and HEX encoding** to securely trans
 * 🔑 Password-based encryption
 * 🔓 Decryption using the same password
 * 🔄 XOR-based reversible encryption
-* 🔁 Bitwise rotation for added security
-* 🧾 Encrypted output stored in HEX format (readable)
+* 🔁 Bitwise rotation (left/right) for added security
+* ➕ Numeric transformation (+5 / -5)
+* 🧾 Binary file handling (supports any file type)
+* ✅ Integrity check using checksum
 * 💻 Command-line interface (CLI)
 * ⚡ Fast and lightweight
 
@@ -22,29 +24,38 @@ It uses **XOR encryption, bitwise rotation, and HEX encoding** to securely trans
 ### 🔐 Encryption Process
 
 1. Read file byte-by-byte
-2. Apply XOR with password key
-3. Perform bitwise rotation
-4. Add numeric shift (+5)
-5. Store result in HEX format
+2. Generate checksum (sum of original bytes)
+3. Apply XOR with password key
+4. Perform bitwise rotation (right)
+5. Add numeric shift (+5)
+6. Write encrypted data to file
+7. Append checksum at end of file
+
+---
 
 ### 🔓 Decryption Process
 
-1. Read HEX values
-2. Reverse numeric shift (-5)
-3. Reverse bit rotation
-4. Apply XOR with same key
-5. Recover original data
+1. Read file size
+2. Extract stored checksum from end
+3. Read encrypted data
+4. Reverse numeric shift (-5)
+5. Reverse bit rotation (left)
+6. Apply XOR with same key
+7. Recalculate checksum
+8. Compare checksums for validation
 
 ---
 
 ## 📂 Project Structure
 
-```
+```id="qlp98x"
 file-locker/
 │
 ├── main.c
 ├── encrypt.c
 ├── encrypt.h
+├── utils.c
+├── utils.h
 ├── README.md
 ```
 
@@ -52,8 +63,8 @@ file-locker/
 
 ## 🔧 Compilation
 
-```bash
-gcc main.c encrypt.c -o locker
+```bash id="v3rc4j"
+gcc main.c encrypt.c utils.c -o locker
 ```
 
 ---
@@ -62,14 +73,14 @@ gcc main.c encrypt.c -o locker
 
 ### 🔐 Encrypt a file
 
-```bash
-./locker input.txt encrypted.txt mypassword e
+```bash id="7zb6p9"
+./locker input.txt encrypted.bin mypassword e
 ```
 
 ### 🔓 Decrypt a file
 
-```bash
-./locker encrypted.txt decrypted.txt mypassword d
+```bash id="8j3cl6"
+./locker encrypted.bin output.txt mypassword d
 ```
 
 ---
@@ -88,31 +99,57 @@ gcc main.c encrypt.c -o locker
 
 ## 💡 Example
 
+```id="rw2hzp"
+Input File:  ankit
+Password:    K
+
+Encrypted:   (binary data + checksum)
+Decrypted:   ankit
 ```
-Input:      ankit
-Encrypted:  (binary/HEX output)
-Decrypted:  ankit
-```
+
+---
+
+## 🔐 Security Layers Used
+
+* XOR Encryption (key-based)
+* Bitwise Rotation (confusion)
+* Numeric Shift (+5 / -5)
+* Checksum Validation (integrity)
+
+---
+
+## ⚠️ Error Handling
+
+* ❌ Wrong password → checksum mismatch
+* ❌ Corrupted file → detected during decryption
+* ❌ File open error → handled
 
 ---
 
 ## ⚠️ Notes
 
 * Same password must be used for decryption
-* Encrypted file may contain non-readable characters (binary/HEX)
-* This project is for **learning and educational purposes**
+* Encrypted file is stored in **binary format**
+* Not suitable for production security (educational purpose)
 
 ---
 
 ## 🔥 Future Improvements
 
-* Stronger encryption algorithm (AES)
-* Base64 encoding support
-* GUI-based interface
-* File integrity check (hashing)
+* AES encryption (strong security)
+* Base64 encoding for readability
+* GUI interface
+* Password hashing
+* File compression
 
 ---
 
 ## 👨‍💻 Author
 
 **Ankit Kumar 🚀**
+
+---
+
+## ⭐ Support
+
+If you like this project, give it a ⭐ on GitHub!
