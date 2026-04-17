@@ -1,155 +1,196 @@
-# 🔐 Secure File Locker in C
+# 🔐 Secure File Locker Pro
 
-A powerful **file encryption & decryption tool** written in C.
-This project uses **XOR encryption, bitwise rotation, and checksum validation** to ensure both **security and data integrity**.
+A professional **file encryption and compression tool in C** using **AES-256 (OpenSSL)** and **zlib compression**.
 
 ---
 
 ## 🚀 Features
 
+* 🔐 AES-256 Encryption (OpenSSL)
+* 📦 File Compression (zlib)
 * 🔑 Password-based encryption
-* 🔓 Decryption using the same password
-* 🔄 XOR-based reversible encryption
-* 🔁 Bitwise rotation (left/right) for added security
-* ➕ Numeric transformation (+5 / -5)
-* 🧾 Binary file handling (supports any file type)
-* ✅ Integrity check using checksum
-* 💻 Command-line interface (CLI)
-* ⚡ Fast and lightweight
+* ⚡ Fast and efficient
+* 🧩 Modular multi-file project
 
 ---
 
 ## 🧠 How It Works
 
-### 🔐 Encryption Process
+### 🔐 Encryption
 
-1. Read file byte-by-byte
-2. Generate checksum (sum of original bytes)
-3. Apply XOR with password key
-4. Perform bitwise rotation (right)
-5. Add numeric shift (+5)
-6. Write encrypted data to file
-7. Append checksum at end of file
+```
+Input File → Compress → Encrypt → Output File
+```
 
----
+### 🔓 Decryption
 
-### 🔓 Decryption Process
-
-1. Read file size
-2. Extract stored checksum from end
-3. Read encrypted data
-4. Reverse numeric shift (-5)
-5. Reverse bit rotation (left)
-6. Apply XOR with same key
-7. Recalculate checksum
-8. Compare checksums for validation
+```
+Encrypted File → Decrypt → Compressed File → Decompress → Original File
+```
 
 ---
 
 ## 📂 Project Structure
 
-```id="qlp98x"
-file-locker/
+```
+locker-pro/
 │
-├── main.c
-├── encrypt.c
-├── encrypt.h
-├── utils.c
-├── utils.h
-├── README.md
+├── Main1.c      # Main program logic
+├── crypto.c     # Encryption & Decryption
+├── crypto.h
+├── compress.c   # Compression
+├── compress.h
+└── README.md
 ```
 
 ---
 
-## 🔧 Compilation
+# ⚙️ Installation
 
-```bash id="v3rc4j"
-gcc main.c encrypt.c utils.c -o locker
+## 🪟 Windows (MSYS2 + MinGW64)
+
+### Step 1: Install MSYS2
+
+https://www.msys2.org/
+
+---
+
+### Step 2: Open Terminal
+
+```
+MSYS2 MinGW64
 ```
 
 ---
 
-## ▶️ Usage
+### Step 3: Update
 
-### 🔐 Encrypt a file
-
-```bash id="7zb6p9"
-./locker input.txt encrypted.bin mypassword e
 ```
-
-### 🔓 Decrypt a file
-
-```bash id="8j3cl6"
-./locker encrypted.bin output.txt mypassword d
+pacman -Syu
 ```
 
 ---
 
-## 📌 Arguments
+### Step 4: Install Dependencies
 
-* `input` → Input file name
-* `output` → Output file name
-* `password` → Encryption/Decryption key
-* `mode` →
-
-  * `e` = Encrypt
-  * `d` = Decrypt
-
----
-
-## 💡 Example
-
-```id="rw2hzp"
-Input File:  ankit
-Password:    K
-
-Encrypted:   (binary data + checksum)
-Decrypted:   ankit
+```
+pacman -S mingw-w64-x86_64-gcc
+pacman -S mingw-w64-x86_64-openssl
+pacman -S mingw-w64-x86_64-zlib
+pacman -S gzip
 ```
 
 ---
 
-## 🔐 Security Layers Used
+### Step 5: Verify
 
-* XOR Encryption (key-based)
-* Bitwise Rotation (confusion)
-* Numeric Shift (+5 / -5)
-* Checksum Validation (integrity)
+```
+which gcc
+```
 
----
+Expected:
 
-## ⚠️ Error Handling
-
-* ❌ Wrong password → checksum mismatch
-* ❌ Corrupted file → detected during decryption
-* ❌ File open error → handled
+```
+/mingw64/bin/gcc
+```
 
 ---
 
-## ⚠️ Notes
+# 🔧 Compilation
 
-* Same password must be used for decryption
-* Encrypted file is stored in **binary format**
-* Not suitable for production security (educational purpose)
+Go to project folder:
 
----
-
-## 🔥 Future Improvements
-
-* AES encryption (strong security)
-* Base64 encoding for readability
-* GUI interface
-* Password hashing
-* File compression
+```
+cd /c/Users/YourName/Desktop/locker-pro
+```
 
 ---
 
-## 👨‍💻 Author
+### Compile
 
-**Ankit Kumar 🚀**
+```
+gcc Main1.c crypto.c compress.c -o locker.exe -lssl -lcrypto -lz
+```
 
 ---
 
-## ⭐ Support
+### If error
 
-If you like this project, give it a ⭐ on GitHub!
+```
+gcc Main1.c crypto.c compress.c -o locker.exe -lssl -lcrypto -lz -I/mingw64/include -L/mingw64/lib
+```
+
+---
+
+# ▶️ Usage
+
+### 🔐 Encrypt
+
+```
+./locker.exe input.txt enc.bin password e
+```
+
+---
+
+### 🔓 Decrypt
+
+```
+./locker.exe enc.bin temp.gz password d
+```
+
+---
+
+### 📦 Decompress
+
+```
+gunzip temp.gz
+```
+
+---
+
+# 📌 Example
+
+```
+echo Hello Ankit > file.txt
+
+./locker.exe file.txt enc.bin mypass e
+./locker.exe enc.bin temp.gz mypass d
+gunzip temp.gz
+```
+
+---
+
+# 🧠 Workflow
+
+```
+file.txt → compress → encrypt → enc.bin
+enc.bin → decrypt → temp.gz → decompress → original file
+```
+
+---
+
+# ⚠️ Notes
+
+* Use same password for encryption & decryption
+* Encrypted file will look random (normal)
+* Always use **MSYS2 MinGW64 terminal**
+
+---
+
+# 🚀 Future Improvements
+
+* GUI application
+* Strong password hashing
+* File integrity check
+
+---
+
+# 👨‍💻 Author
+
+**Ankit**
+
+---
+
+# ⭐ Support
+
+Give a ⭐ if you like this project!
